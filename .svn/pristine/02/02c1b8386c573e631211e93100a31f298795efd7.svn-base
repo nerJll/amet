@@ -1,0 +1,29 @@
+package com.aixu.meeting.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.aixu.meeting.dao.AixuMeetandroomMapper;
+import com.aixu.meeting.domain.AixuMeetandroom;
+
+/**
+ * @author RenBowen
+ * @date 2017/10/26 10:10:36
+ * @since 1.0.0
+ * @meeting
+ */
+@Service
+public class MeetAndRoomService {
+	
+	@Autowired
+	private AixuMeetandroomMapper meetAndRoomDAO;
+	
+	/**
+	 * 根据Id查询会议与房间 Obj
+	 * @param id 关联表Id
+	 * @return 会议与房间 Obj
+	 */
+	public AixuMeetandroom getMeetAndRoomById(String id) {
+		return meetAndRoomDAO.selectByPrimaryKey(id);
+	}
+}

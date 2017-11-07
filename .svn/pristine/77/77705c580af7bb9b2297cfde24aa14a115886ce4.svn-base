@@ -1,0 +1,50 @@
+package com.aixu.meeting.service;
+
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.aixu.meeting.dao.AixuMeetingMapper;
+import com.aixu.meeting.domain.AixuMeeting;
+import com.aixu.meeting.utils.IDUtils;
+
+/**
+ * @author RenBowen
+ * @date 2017/10/25 4:50:54
+ * @since 1.0.0
+ * @meeting
+ */
+@Service
+public class MeetService {
+	
+	@Autowired
+	private AixuMeetingMapper meetDAO;
+	
+	
+	/**
+	 * 根据主键查询会议
+	 * @param id 会议Id
+	 * @return 会议Obj
+	 */
+	public AixuMeeting getMeetById(String id) {
+		return meetDAO.selectByPrimaryKey(id);
+	}
+	
+	/**
+	 * 预定会议
+	 * @param 会议Obj
+	 */
+	@Transactional
+	public void saveMeet(AixuMeeting meet) {
+		// 赋初值
+		String id = IDUtils.getUuid(true);
+		meet.setMeetId(id);
+		meet.setMeetCreateTime(new Date());
+		meet.setMeetState("未审核");
+		
+		meetDAO.insertSelective(meet);
+	}
+	
+}

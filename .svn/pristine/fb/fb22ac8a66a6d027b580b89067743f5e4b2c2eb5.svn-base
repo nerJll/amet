@@ -1,0 +1,47 @@
+package com.aixu.meeting.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.aixu.meeting.domain.AixuMeeting;
+import com.aixu.meeting.domain.AixuMeetingroom;
+import com.aixu.meeting.service.MeetService;
+import com.aixu.meeting.service.RoomService;
+
+@Controller
+@RequestMapping("meet")
+public class MeetController {
+	
+	@Autowired
+	private MeetService meetService;
+	
+	@Autowired
+	private RoomService roomService;
+	
+	/**
+	 * 新增会议
+	 * @param meet 会议Obj
+	 * @return
+	 */
+	@PostMapping("save-meet")
+	public String saveMeet(AixuMeeting meet) {
+		meetService.saveMeet(meet);
+		return "meet/index";
+	}
+	
+	/**
+	 * 条件查询会议室
+	 * @return
+	 */
+	@RequestMapping("list-meet")
+	@ResponseBody
+	public List<AixuMeetingroom> listMeet(@RequestParam(name = "staTime") String staTime, @RequestParam(name = "endTime") String endTime) {
+		return meetService.listMeetByTime(staTime, endTime);
+	}
+}

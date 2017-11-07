@@ -1,0 +1,241 @@
+package com.aixu.meeting.domain;
+
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+public class AixuMeeting implements java.io.Serializable{
+
+	private static final long serialVersionUID = -8611148655260729914L;
+
+	private String meetId;
+
+    private String applyEmpNo;//申请人工号
+
+    private String applyEmpName;//申请人姓名
+
+    private String meetTheme;//会议主题
+
+    private Integer meetEmpNum;//参会人数
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date staTime;//开始时间
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date endTime;//结束时间
+
+    private String need;//需求
+
+    private String meetType;//会议类型
+
+    private String meetPerNo;//参会人员工号
+
+    private String meetPerName;//所有参会人员姓名
+
+    private String meetRoomId;//所有会议室ID
+
+    private Date meetCreateTime;//申请时间
+
+    private String meetState;//会议状态：未审核，已通过，未通过
+
+    private String resOne;
+
+    private String resTwo;
+
+    private String resThree;
+
+    private String resFour;
+
+    private String resFive;
+
+    public String getMeetId() {
+        return meetId;
+    }
+
+    public void setMeetId(String meetId) {
+        this.meetId = meetId == null ? null : meetId.trim();
+    }
+
+    public String getApplyEmpNo() {
+        return applyEmpNo;
+    }
+
+    public void setApplyEmpNo(String applyEmpNo) {
+        this.applyEmpNo = applyEmpNo == null ? null : applyEmpNo.trim();
+    }
+
+    public String getApplyEmpName() {
+        return applyEmpName;
+    }
+
+    public void setApplyEmpName(String applyEmpName) {
+        this.applyEmpName = applyEmpName == null ? null : applyEmpName.trim();
+    }
+
+    public String getMeetTheme() {
+        return meetTheme;
+    }
+
+    public void setMeetTheme(String meetTheme) {
+        this.meetTheme = meetTheme == null ? null : meetTheme.trim();
+    }
+
+    public Integer getMeetEmpNum() {
+        return meetEmpNum;
+    }
+
+    public void setMeetEmpNum(Integer meetEmpNum) {
+        this.meetEmpNum = meetEmpNum;
+    }
+
+    public Date getStaTime() {
+        return staTime;
+    }
+
+    public void setStaTime(Date staTime) {
+        this.staTime = staTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getNeed() {
+        return need;
+    }
+
+    public void setNeed(String need) {
+        this.need = need == null ? null : need.trim();
+    }
+
+    public String getMeetType() {
+        return meetType;
+    }
+
+    public void setMeetType(String meetType) {
+        this.meetType = meetType == null ? null : meetType.trim();
+    }
+
+    public String getMeetPerNo() {
+        return meetPerNo;
+    }
+
+    public void setMeetPerNo(String meetPerNo) {
+        this.meetPerNo = meetPerNo == null ? null : meetPerNo.trim();
+    }
+
+    public String getMeetPerName() {
+        return meetPerName;
+    }
+
+    public void setMeetPerName(String meetPerName) {
+        this.meetPerName = meetPerName == null ? null : meetPerName.trim();
+    }
+
+    public String getMeetRoomId() {
+        return meetRoomId;
+    }
+
+    public void setMeetRoomId(String meetRoomId) {
+        this.meetRoomId = meetRoomId == null ? null : meetRoomId.trim();
+    }
+
+    public Date getMeetCreateTime() {
+        return meetCreateTime;
+    }
+
+    public void setMeetCreateTime(Date meetCreateTime) {
+        this.meetCreateTime = meetCreateTime;
+    }
+
+    public String getMeetState() {
+        return meetState;
+    }
+
+    public void setMeetState(String meetState) {
+        this.meetState = meetState == null ? null : meetState.trim();
+    }
+
+    public String getResOne() {
+        return resOne;
+    }
+
+    public void setResOne(String resOne) {
+        this.resOne = resOne == null ? null : resOne.trim();
+    }
+
+    public String getResTwo() {
+        return resTwo;
+    }
+
+    public void setResTwo(String resTwo) {
+        this.resTwo = resTwo == null ? null : resTwo.trim();
+    }
+
+    public String getResThree() {
+        return resThree;
+    }
+
+    public void setResThree(String resThree) {
+        this.resThree = resThree == null ? null : resThree.trim();
+    }
+
+    public String getResFour() {
+        return resFour;
+    }
+
+    public void setResFour(String resFour) {
+        this.resFour = resFour == null ? null : resFour.trim();
+    }
+
+    public String getResFive() {
+        return resFive;
+    }
+
+    public void setResFive(String resFive) {
+        this.resFive = resFive == null ? null : resFive.trim();
+    }
+
+	@Override
+	public String toString() {
+		return "{\"meetId\":\"" + meetId + "\",\"applyEmpNo\":\"" + applyEmpNo + "\",\"applyEmpName\":\"" + applyEmpName
+				+ "\",\"meetTheme\":\"" + meetTheme + "\",\"meetEmpNum\":\"" + meetEmpNum + "\",\"staTime\":\""
+				+ staTime + "\",\"endTime\":\"" + endTime + "\",\"need\":\"" + need + "\",\"meetType\":\"" + meetType
+				+ "\",\"meetPerNo\":\"" + meetPerNo + "\",\"meetPerName\":\"" + meetPerName + "\",\"meetRoomId\":\""
+				+ meetRoomId + "\",\"meetCreateTime\":\"" + meetCreateTime + "\",\"meetState\":\"" + meetState
+				+ "\",\"resOne\":\"" + resOne + "\",\"resTwo\":\"" + resTwo + "\",\"resThree\":\"" + resThree
+				+ "\",\"resFour\":\"" + resFour + "\",\"resFive\":\"" + resFive + "\"}";
+	}
+
+	public AixuMeeting(String meetId, String applyEmpNo, String applyEmpName, String meetTheme, Integer meetEmpNum,
+			Date staTime, Date endTime, String need, String meetType, String meetPerNo, String meetPerName,
+			String meetRoomId, Date meetCreateTime, String meetState, String resOne, String resTwo, String resThree,
+			String resFour, String resFive) {
+		this.meetId = meetId;
+		this.applyEmpNo = applyEmpNo;
+		this.applyEmpName = applyEmpName;
+		this.meetTheme = meetTheme;
+		this.meetEmpNum = meetEmpNum;
+		this.staTime = staTime;
+		this.endTime = endTime;
+		this.need = need;
+		this.meetType = meetType;
+		this.meetPerNo = meetPerNo;
+		this.meetPerName = meetPerName;
+		this.meetRoomId = meetRoomId;
+		this.meetCreateTime = meetCreateTime;
+		this.meetState = meetState;
+		this.resOne = resOne;
+		this.resTwo = resTwo;
+		this.resThree = resThree;
+		this.resFour = resFour;
+		this.resFive = resFive;
+	}
+
+	public AixuMeeting() {}
+    
+}

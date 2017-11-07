@@ -1,0 +1,77 @@
+package com.aixu.meeting.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.aixu.meeting.domain.AixuMeetingroom;
+import com.aixu.meeting.domain.AixuMeetingroomExample;
+import com.aixu.meeting.service.RoomService;
+
+@Controller
+@RequestMapping("room")
+public class RoomController {
+	
+	@Autowired
+	private RoomService roomService;
+	
+	/**
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("get-room/{id}")
+	public String getRoomById(@PathVariable(name = "id")String id) {
+		roomService.getRoomById(id);
+		return null;
+	}
+	
+	/**
+	 * @return
+	 */
+	@RequestMapping("list-room")
+	@ResponseBody
+	public List<AixuMeetingroom> listRoom() {
+		AixuMeetingroomExample example = new AixuMeetingroomExample();
+		return roomService.listRoom(example);
+	}
+	
+	/**
+	 * 修改会议室
+	 * @param room
+	 * @return
+	 */
+	@PostMapping("update-room")
+	public String updateRoom(AixuMeetingroom room) {
+		roomService.updateRoom(room);
+		return null;
+	}
+	
+	/**
+	 * 删除会议室
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("delete-room/{id}")
+	public String deleteRoom(@PathVariable(name = "id")String id) {
+		roomService.deleteRoom(id);
+		return null;
+	}
+	
+	
+	/**
+	 * 增加会议室
+	 * @param room
+	 * @return
+	 */
+	@RequestMapping("save-room")
+	public String saveRoom(AixuMeetingroom room) {
+		roomService.saveRoom(room);
+		return null;
+	}
+}

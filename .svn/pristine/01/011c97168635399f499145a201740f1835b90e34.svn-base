@@ -1,0 +1,118 @@
+package com.aixu.meeting.controller;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.aixu.meeting.domain.AixuMeeting;
+import com.aixu.meeting.domain.AixuMeetingroom;
+import com.aixu.meeting.domain.AixuMeetingroomExample;
+import com.aixu.meeting.service.MeetAndRoomService;
+import com.aixu.meeting.service.MeetService;
+import com.aixu.meeting.service.RoomService;
+import com.aixu.meeting.utils.DateUtil;
+
+@Controller
+@RequestMapping("room")
+public class RoomController {
+	
+	@Autowired
+	private RoomService roomService;
+	@Autowired
+	private MeetAndRoomService meetAndRoomService;
+	@Autowired
+	private MeetService meetService;
+	
+	/**
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("get-room/{id}")
+	public String getRoomById(@PathVariable(name = "id")String id) {
+		roomService.getRoomById(id);
+		return null;
+	}
+	
+	/**
+	 * @return
+	 */
+	@RequestMapping("list-room")
+	@ResponseBody
+	public List<AixuMeetingroom> listRoom() {
+		AixuMeetingroomExample example = new AixuMeetingroomExample();
+		return roomService.listRoom(example);
+	}
+	
+	/**
+	 * 修改会议室
+	 * @param room
+	 * @return
+	 */
+	@PostMapping("update-room")
+	public String updateRoom(AixuMeetingroom room) {
+		roomService.updateRoom(room);
+		return null;
+	}
+	
+	/**
+	 * 删除会议室
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("delete-room/{id}")
+	public String deleteRoom(@PathVariable(name = "id")String id) {
+		roomService.deleteRoom(id);
+		return null;
+	}
+	
+	
+	/**
+	 * 增加会议室
+	 * @param room
+	 * @return
+	 */
+	@RequestMapping("save-room")
+	public String saveRoom(AixuMeetingroom room) {
+		roomService.saveRoom(room);
+		return null;
+	}
+	
+	/**
+	 * @param roomId
+	 * @return map<String,AixuMeeting>
+	 */
+	@GetMapping("/getRoomInfo/{roomId}")
+	@ResponseBody
+	public Map<String,Object> getRoomInfo(@PathVariable("roomId")String roomId){
+		Map<String,Object> map = new HashMap<>();
+		AixuMeetingroomExample exp = new AixuMeetingroomExample();
+		exp.createCriteria().andMeetRoomIdEqualTo(roomId);
+		AixuMeetingroom room = roomService.listRoom(exp).get(0);
+		List<String> meetIds = meetAndRoomService.getMeetIdsByRoomId(roomId);
+		List<AixuMeeting> meets = new ArrayList<>();
+		if(meetIds!=null){
+			String toDay = "2017-11-01";
+			System.out.println(toDay);
+			for(int i=0; i<meetIds.size(); i++){
+				String meetStaDate = DateUtil.getDateFormat(meetService.getMeetById(meetIds.get(i)).getStaTime());
+				System.out.println(meetStaDate);
+				if(toDay.equals(meetStaDate)){
+					meets.add(meetService.getMeetById(meetIds.get(i)));
+				}
+			}
+		}
+		map.put("roomInfo", room);
+		map.put("meetInfo", meets);
+		return map;
+	}
+}
