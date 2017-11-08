@@ -1,0 +1,28 @@
+package com.aixu.meeting.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+/** 
+* @author Jianglinle
+* @date 2017年10月25日 下午2:55:21 
+* @version 1.0.0
+* @aiko-
+*/
+@Controller
+@RequestMapping("/test")
+public class TestController {
+
+	@GetMapping("/test1")
+	public String test1(){
+		return "test/test1";
+	}
+	
+	@GetMapping("/test2")
+	public String test2(){
+		return "test/test2";
+	}
+}
+ 
