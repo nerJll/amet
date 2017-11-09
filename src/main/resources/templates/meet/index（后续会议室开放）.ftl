@@ -15,6 +15,7 @@
 	src="${ctx}/easyui/locale/easyui-lang-zh_CN.js"></script>
 <style type="text/css">
 .p{
+	color:blue;
 	font-size:18px;
 }
 </style>
@@ -26,11 +27,11 @@ var dkmi = ''
 
 	//页面加载启动
 	$(function() {
-		//遮盖未开放的会议室div层
+		
 		//$.messager.alert("",checkTime(x1,new Date()))
 		
 		$('#appMeet').linkbutton('disable')
-		
+
 		//alert(romi+'--'+dkmi)
 		
 		for(var i=1; i<36; i++){
@@ -243,7 +244,7 @@ var dkmi = ''
 				//$.messager.alert("",data.roomInfo.meetRoomName)
 				$('#roomInfot').append(
 						`<tr>`
-						+`<td colspan='4' style='color:blue;font-weight:bold;font-size:19px'>基本信息<hr size='1'/></td>`
+						+`<td colspan='4' style='font-size:19px'>基本信息<hr size='1'/></td>`
 						+`</tr>`
 						+`<tr>`
 						+`<td>名称：</td>`
@@ -262,7 +263,7 @@ var dkmi = ''
 						)
 				//$.messager.alert("",data.meetInfo)
 				$('#meetInfot').append(
-					`<tr><td colspan='8' style='color:blue;font-weight:bold;font-size:19px'>预订情况（今天）<hr size='1'/></td></tr>`
+					`<tr><td colspan='8' style='font-size:19px'>预订情况（今天）<hr size='1'/></td></tr>`
 				)
 				console.log(data.meetInfo)
 				if(data.meetInfo.length==0){
@@ -342,7 +343,7 @@ var dkmi = ''
 						<td width="5"></td>
 						<td><span style="font-size: 15px;">&nbsp;时间段：</span></td>
 						<td>
-						<select style="width: 70px; height: 30px"
+						<select style="width: 60px; height: 30px"
 							data-options="editable:false"
 							class="easyui-combobox" id="statime">
 							<option value=""> </option>
@@ -372,7 +373,7 @@ var dkmi = ''
 							<option value="23:00">23:00</option><option value="23:30">23:30</option>
 							</select></td>
 						<td><span style="font-size: 15px;">&nbsp;至&nbsp;</span></td>
-						<td><select style="width: 70px; height: 30px"
+						<td><select style="width: 60px; height: 30px"
 							data-options="editable:false"
 							class="easyui-combobox" id="endtime">
 							<option value=""> </option>
@@ -995,8 +996,7 @@ var dkmi = ''
 									<td>
 										<div id="aixu_3"
 											style="width: 170px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 20px">
 												<tr style="height: 20px">
 													<td colspan="2"><img alt="视频会议"
@@ -1030,7 +1030,7 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 								</tr>
@@ -1040,8 +1040,7 @@ var dkmi = ''
 									<td colspan="2">
 										<div id="aixu_4"
 											style="width: 300px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 20px">
 												<tr style="height: 20px">
 													<td colspan="2"><img alt="视频会议"
@@ -1051,7 +1050,7 @@ var dkmi = ''
 												<tr>
 													<td colspan="2"><b>4#</b></td>
 												</tr>
-												<tr>
+													<tr>
 													<td>
 														<div id="aixu_4a">
 															<div id="aixu_4b" style="float: left">
@@ -1075,14 +1074,13 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 									<td>
 										<div id="aixu_5"
 											style="width: 170px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 30px">
 												<tr>
 													<td colspan="3"><b>5#</b></td>
@@ -1111,14 +1109,13 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 									<td>
 										<div id="aixu_6"
 											style="width: 170px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 30px">
 												<tr>
 													<td colspan="3"><b>6#</b></td>
@@ -1147,7 +1144,7 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 								</tr>
@@ -1157,8 +1154,7 @@ var dkmi = ''
 									<td>
 										<div id="aixu_7"
 											style="width: 145px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 30px">
 												<tr>
 													<td colspan="3"><b>7#</b></td>
@@ -1187,14 +1183,13 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 									<td>
 										<div id="aixu_8"
 											style="width: 145px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 30px">
 												<tr>
 													<td colspan="3"><b>8#</b></td>
@@ -1223,14 +1218,13 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 									<td colspan="2">
 										<div id="aixu_9"
 											style="width: 350px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 20px">
 												<tr style="height: 20px">
 													<td colspan="2"><img alt="视频会议"
@@ -1264,7 +1258,7 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 								</tr>
@@ -1274,8 +1268,7 @@ var dkmi = ''
 									<td>
 										<div id="aixu_10"
 											style="width: 145px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 20px">
 												<tr style="height: 20px">
 													<td colspan="2"><img alt="视频会议"
@@ -1309,14 +1302,13 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 									<td>
 										<div id="aixu_11"
 											style="width: 145px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 30px">
 												<tr>
 													<td colspan="3"><b>11#</b></td>
@@ -1345,14 +1337,13 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 									<td colspan="2">
 										<div id="aixu_12"
 											style="width: 350px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 30px">
 												<tr>
 													<td colspan="2"><b>12#</b></td>
@@ -1381,7 +1372,7 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 								</tr>
@@ -1391,8 +1382,7 @@ var dkmi = ''
 									<td colspan="2">
 										<div id="aixu_13"
 											style="width: 300px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 20px">
 												<tr style="height: 20px">
 													<td colspan="2"><img alt="视频会议"
@@ -1426,14 +1416,13 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 									<td>
 										<div id="aixu_14"
 											style="width: 170px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 30px">
 												<tr>
 													<td colspan="3"><b>14#</b></td>
@@ -1462,14 +1451,13 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 									<td>
 										<div id="aixu_15"
 											style="width: 170px; height: 100px; background-color: #FFE1FF; border-radius: 8px;">
-											<span>后续开放..</span>
-											<!-- <table
+											<table
 												style="width: 100%; text-align: center; font-size: 30px">
 												<tr>
 													<td colspan="3"><b>15#</b></td>
@@ -1498,7 +1486,7 @@ var dkmi = ''
 														</div>
 													</td>
 												</tr>
-											</table> -->
+											</table>
 										</div>
 									</td>
 								</tr>
@@ -1919,6 +1907,5 @@ var dkmi = ''
 		<table style='width:100%;font-size:15px;text-align:left' id='meetInfot'>
 		</table>
 	</div>
-	<div id='log_window'></div>
 </body>
 </html>
