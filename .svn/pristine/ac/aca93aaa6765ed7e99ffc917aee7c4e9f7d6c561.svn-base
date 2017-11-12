@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.aiko.common.ajax.AjaxObject;
 import com.aiko.config.wxcp.WxcpApi;
-import com.aixu.meeting.utils.AjaxObject;
+import com.aixu.meeting.utils.WeChatUtil;
 import com.google.gson.Gson;
 
 import me.chanjar.weixin.cp.bean.WxCpMessage;
