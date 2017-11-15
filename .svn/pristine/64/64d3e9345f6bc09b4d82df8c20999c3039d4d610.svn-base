@@ -1,0 +1,118 @@
+package com.aixu.meeting.controller;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.aiko.config.wxcp.WxcpApi;
+import com.aixu.meeting.utils.AjaxObject;
+import com.google.gson.Gson;
+
+import me.chanjar.weixin.cp.bean.WxCpMessage;
+
+
+/** 
+* @author Jianglinle
+* @date 2017年10月25日 下午2:55:21 
+* @version 1.0.0
+* @aiko-
+*/
+@Controller
+@RequestMapping("/test")
+public class TestController {
+
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate; //数据可显
+
+	/*@Autowired
+	private RedisTemplate redisTemplate;//数据不可显
+*/	
+	@GetMapping("/test1")
+	public String test1(){
+		return "test/test1";
+	}
+	
+	@GetMapping("/test2")
+	public String test2(){
+		return "test/test2";
+	}
+	
+	@GetMapping("/test3")
+	@ResponseBody
+	public String test3(){
+		try{
+			stringRedisTemplate.opsForValue().set("name", "jianglinle");
+			return "成功";
+		}catch(Exception e){
+			e.printStackTrace();
+			return "失败";
+		}
+		//Assert.assertEquals("111", stringRedisTemplate.opsForValue().get("aaa"));
+	}
+
+	@GetMapping("/test4")
+	@ResponseBody
+	public Object test4(){
+		Object obj = stringRedisTemplate.opsForValue().get("name");
+		return obj;
+		//Assert.assertEquals("111", stringRedisTemplate.opsForValue().get("aaa"));
+	}
+	
+	@RequestMapping(value = "/system/test")
+	@ResponseBody
+	public AjaxObject sendText(){	
+		AjaxObject returnVal = new AjaxObject();
+		try {
+			WxCpMessage msg=new WxCpMessage();
+			Gson gson = new Gson();
+			MultiValueMap<String, Object> requestEntity = new LinkedMultiValueMap<String, Object>();
+			//推送TEXT
+			msg.setAgentId(74);//企业应用id
+			msg.setContent("wxcpApi/nsendText/n测试2");
+			msg.setToUser("1016087");//1013608|1014906|1014709
+			requestEntity.add("requestJson", gson.toJson(msg));
+			//跳转url,可不传,url中会默认一个参数userid,值为微信接收人的工号
+			requestEntity.add("redirectUri","http://portal.aikosolar.com/?test=2");
+			String result=WxcpApi.send(WxcpApi.TEXT,requestEntity);
+			
+			//推送NEWS
+			/*msg.setAgentId(74);//企业应用id
+			msg.setToUser("1013608");
+List<NewArticle> articleList=new ArrayList<NewArticle>();
+		NewArticle article1=new NewArticle();
+			article1.setTitle("中五百万啦");
+			article1.setDescription("中奖号码为：\n32,14,24,12,15,66");
+//图片路径	article1.setPicUrl("http://mmbiz.qpic.cn/mmbiz_jpg/Pn4Sm0RsAugkDPqLwlFtVibiaVyEesmmLISx6HFCV54nIQNnCq4RLRlMek6ibUsFwYD5cLLnIiabPKiaQMSlibumbs0g/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1");
+//详情
+	article1.setUrl("http://mp.weixin.qq.com/s/lGmY8zu22zVKrU1eM3oQFw");		
+			articleList.add(article1);
+
+			NewArticle article2=new NewArticle();
+			article2.setTitle("可以买个铺位啦");
+			article2.setDescription("地址：xxxx");
+			article2.setPicUrl("http: //baidu.lecai.com/lottery/draw/?agentId=5571");
+			article2.setUrl("http: //a0.att.hudong.com/02/72/19300001231741130510727569015_950.jpg");
+			articleList.add(article2);
+			msg.setArticles(articleList);
+			requestEntity.add("requestJson", gson.toJson(msg));
+			String result=WxcpApi.send(WxcpApi.NEWS,requestEntity);	*/		
+			if("1".equals(result)){
+				returnVal.success();
+			}else{
+				returnVal.fail(result);
+			}
+		} catch (Throwable e) {
+			//logger.error("推送微信信息过程中出现异常", e);
+			returnVal.fail(e.getMessage());
+		}
+		return returnVal;
+	}
+
+}
+ 

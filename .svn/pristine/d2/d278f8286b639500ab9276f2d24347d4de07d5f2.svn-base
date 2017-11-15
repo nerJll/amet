@@ -1,0 +1,131 @@
+package com.aixu.meeting.service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.aixu.meeting.dao.AixuMeetandroomMapper;
+import com.aixu.meeting.dao.AixuMeetingMapper;
+import com.aixu.meeting.dao.AixuMeetingroomMapper;
+import com.aixu.meeting.domain.AixuMeetandroom;
+import com.aixu.meeting.domain.AixuMeetandroomExample;
+import com.aixu.meeting.domain.AixuMeeting;
+import com.aixu.meeting.domain.AixuMeetingExample;
+import com.aixu.meeting.domain.AixuMeetingroom;
+import com.aixu.meeting.domain.AixuMeetingroomExample;
+import com.aixu.meeting.utils.DateUtil;
+import com.aixu.meeting.utils.IDUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+/**
+ * @author RenBowen
+ * @date 2017/10/25 14:50:54
+ * @since 1.0.0
+ * @meeting
+ */
+@Service
+public class MeetService {
+	
+	@Autowired
+	private AixuMeetingMapper meetDAO;
+	
+	@Autowired
+	private AixuMeetingroomMapper roomDAO;
+	
+	@Autowired
+	private AixuMeetandroomMapper mAndrDAO;
+	
+	@Autowired
+	private UserService userService;
+	
+	/**
+	 * 根据主键查询会议
+	 * @param id 会议Id
+	 * @return 会议Obj
+	 */
+	public AixuMeeting getMeetById(String id) {
+		return meetDAO.selectByPrimaryKey(id);
+	}
+	
+	/**
+	 * 预定会议
+	 * @param 会议Obj
+	 */
+	@Transactional
+	public void saveMeet(AixuMeeting meet) {
+		// 赋初值
+		String id = IDUtils.getUuid(true);
+		meet.setMeetId(id);
+		meet.setMeetCreateTime(new Date());
+		meet.setMeetState("待审核");
+		meet.setApplyEmpName(userService.getUserByNo(meet.getApplyEmpNo()).getName());
+		meetDAO.insertSelective(meet);
+	}
+	
+	@Transactional
+	public void saveMeet(AixuMeeting meet, String id) {
+		// 赋初值
+		meet.setMeetId(id);
+		meet.setMeetCreateTime(new Date());
+		meet.setMeetState("待审核");
+		meet.setMeetType("视频会议");
+		meet.setApplyEmpName(userService.getUserByNo(meet.getApplyEmpNo()).getName());
+		meetDAO.insertSelective(meet);
+	}
+	
+	/**
+	 * 条件查询会议
+	 * @param example 会议查询类
+	 * @return 会议集合
+	 */
+	public List<AixuMeeting> listMeet(AixuMeetingExample example) {
+		return meetDAO.selectByExample(example);
+	}
+	
+	/**
+	 * 根据时间段查询会议室占用情况
+	 * @return
+	 */
+	public List<AixuMeetingroom> listMeetByTime(String staTime, String endTime) {
+		List<AixuMeetingroom> returnList = new ArrayList<>();
+		// 时间段传参
+		Map<String, Object> map = new HashMap<>(2);
+		map.put("staTime", DateUtil.getDateTimeFormat(staTime));
+		map.put("endTime", DateUtil.getDateTimeFormat(endTime));
+		List<AixuMeeting> meetList = meetDAO.selectByTime(map);
+		for (AixuMeeting aixuMeeting : meetList) {
+			AixuMeetandroomExample example = new AixuMeetandroomExample();
+			example.createCriteria().andMeetIdEqualTo(aixuMeeting.getMeetId());
+			List<AixuMeetandroom> mNrList = mAndrDAO.selectByExample(example);
+			for (AixuMeetandroom aixuMeetandroom : mNrList) {
+				AixuMeetingroomExample roomExample = new AixuMeetingroomExample();
+				roomExample.createCriteria().andMeetRoomIdEqualTo(aixuMeetandroom.getRoomId());
+				List<AixuMeetingroom> roomList = roomDAO.selectByExample(roomExample);
+				for (AixuMeetingroom aixuMeetingroom : roomList)
+					returnList.add(aixuMeetingroom);
+			}
+		}
+		return returnList;
+	}
+	
+	/**
+	 * 返回所有视频会议
+	 */
+	public PageInfo<AixuMeeting> findMeetingList(int currentPage, int pageSize, String status) {
+		PageHelper.startPage(currentPage, pageSize);
+		AixuMeetingExample exp = new AixuMeetingExample();
+		if(status!=null && !status.equals("")){
+			exp.createCriteria().andMeetStateEqualTo(status);
+		}
+		exp.createCriteria().andMeetTypeEqualTo("视频会议");
+		List<AixuMeeting> meetings = meetDAO.selectByExample(exp);
+		return new PageInfo<AixuMeeting>(meetings);
+	}
+}

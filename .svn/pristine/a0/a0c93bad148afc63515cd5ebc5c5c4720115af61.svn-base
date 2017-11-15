@@ -1,0 +1,225 @@
+package com.aixu.meeting.controller;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.aixu.meeting.domain.AikoUser;
+import com.aixu.meeting.domain.AixuMeeting;
+import com.aixu.meeting.domain.AixuMeetingroom;
+import com.aixu.meeting.domain.AixuMeetingroomExample;
+import com.aixu.meeting.service.MeetAndRoomService;
+import com.aixu.meeting.service.MeetService;
+import com.aixu.meeting.service.RoomService;
+import com.aixu.meeting.service.UserService;
+import com.aixu.meeting.utils.DateUtil;
+
+@Controller
+@RequestMapping("room")
+public class RoomController {
+
+	@Autowired
+	private RoomService roomService;
+	@Autowired
+	private MeetAndRoomService meetAndRoomService;
+	@Autowired
+	private MeetService meetService;
+	@Autowired
+	private UserService userService;
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("get-room/{id}")
+	public String getRoomById(@PathVariable(name = "id") String id) {
+		roomService.getRoomById(id);
+		return null;
+	}
+
+	/**
+	 * @return
+	 */
+	@RequestMapping("list-room")
+	@ResponseBody
+	public List<AixuMeetingroom> listRoom() {
+		AixuMeetingroomExample example = new AixuMeetingroomExample();
+		return roomService.listRoom(example);
+	}
+
+	/**
+	 * 修改会议室
+	 * 
+	 * @param room
+	 * @return
+	 */
+	@PostMapping("update-room")
+	public String updateRoom(AixuMeetingroom room) {
+		roomService.updateRoom(room);
+		return null;
+	}
+
+	/**
+	 * 删除会议室
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("delete-room/{id}")
+	public String deleteRoom(@PathVariable(name = "id") String id) {
+		roomService.deleteRoom(id);
+		return null;
+	}
+
+	/**
+	 * 增加会议室
+	 * 
+	 * @param room
+	 * @return
+	 */
+	@RequestMapping("save-room")
+	public String saveRoom(AixuMeetingroom room) {
+		roomService.saveRoom(room);
+		return null;
+	}
+
+	/**
+	 * @param roomId
+	 * @return map<String,AixuMeeting>
+	 */
+	@GetMapping("/getRoomInfo/{roomId}")
+	@ResponseBody
+	public Map<String, Object> getRoomInfo(@PathVariable("roomId") String roomId) {
+		Map<String, Object> map = new HashMap<>();
+		AixuMeetingroomExample exp = new AixuMeetingroomExample();
+		exp.createCriteria().andMeetRoomIdEqualTo(roomId);
+		AixuMeetingroom room = roomService.listRoom(exp).get(0);
+		List<String> meetIds = meetAndRoomService.getMeetIdsByRoomId(roomId);
+		List<AixuMeeting> meets = new ArrayList<>();
+		if (meetIds != null) {
+			String toDay = DateUtil.getDateFormat(new Date());
+			System.out.println(toDay);
+			for (int i = 0; i < meetIds.size(); i++) {
+				String meetStaDate = DateUtil.getDateFormat(meetService.getMeetById(meetIds.get(i)).getStaTime());
+				System.out.println(meetStaDate);
+				if (toDay.equals(meetStaDate)) {
+					meets.add(meetService.getMeetById(meetIds.get(i)));
+				}
+			}
+		}
+		map.put("roomInfo", room);
+		map.put("meetInfo", meets);
+		return map;
+	}
+
+	/**
+	 * 首页传递会议室id至预订界面
+	 * 首页人员信息渲染
+	 * @param roomIds
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("order-page")
+	public String toOrderPage(@RequestParam(name = "rooms", required = false)String roomIds, Model model, HttpServletRequest req,
+			@RequestParam(name = "staTime", required = false)String staTime, @RequestParam(name = "endTime",  required = false)String endTime, @RequestParam(name = "state",  required = false)String state) {
+		List<AixuMeetingroom> onlyTwo = new ArrayList<AixuMeetingroom>();
+		String[] roomId = roomIds.split(",");
+		for (int i = 0; i < roomId.length; i++) {
+			AixuMeetingroom roomById = roomService.getRoomById(roomId[i]);
+			onlyTwo.add(roomById);
+		}
+		// 遍历全部人员
+		List<AikoUser> userlist = userService.listAllUser();
+		// it部
+		ArrayList<AikoUser> itList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("流程与IT部"))
+				itList.add(aikoUser);
+		// 总经办
+		ArrayList<AikoUser> zjbList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("总经办"))
+				zjbList.add(aikoUser);
+		// 人力资源及行政部
+		ArrayList<AikoUser> rlzyList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("人力资源及行政部"))
+				rlzyList.add(aikoUser);
+		// 财务部
+		ArrayList<AikoUser> cwList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("财务部"))
+				cwList.add(aikoUser);
+		// 销售部
+		ArrayList<AikoUser> xsList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("销售部"))
+				xsList.add(aikoUser);
+		// 品质管理部
+		ArrayList<AikoUser> pzList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("品质管理部"))
+				pzList.add(aikoUser);
+		// 生产管理办公室
+		ArrayList<AikoUser> scbList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("生产管理办公室"))
+				scbList.add(aikoUser);
+		// 计划物控部
+		ArrayList<AikoUser> jhkzList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("计划物控部"))
+				jhkzList.add(aikoUser);
+		// 采购部
+		ArrayList<AikoUser> cgList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("采购部"))
+				cgList.add(aikoUser);
+		// 研发部
+		ArrayList<AikoUser> yfList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("研发部"))
+				yfList.add(aikoUser);
+		// 市场
+		ArrayList<AikoUser> marketList = new ArrayList<AikoUser>();
+		for (AikoUser aikoUser : userlist)
+			if (aikoUser.getDeptName().equals("市场"))
+				marketList.add(aikoUser);
+		// 填充
+		model.addAttribute("users", userlist);
+		model.addAttribute("its", itList);
+		model.addAttribute("zjbs", zjbList);
+		model.addAttribute("rlzys", rlzyList);
+		model.addAttribute("cws", cwList);
+		model.addAttribute("xss", xsList);
+		model.addAttribute("scbs", scbList); 
+		model.addAttribute("jhkzs", jhkzList); 
+		model.addAttribute("cgs", cgList);
+		model.addAttribute("yfs", cgList);
+		model.addAttribute("markets", marketList);
+		model.addAttribute("pzs", pzList);
+		// 发送会议室
+		model.addAttribute("rooms", onlyTwo);
+		// 发送时间段
+		model.addAttribute("staTime", staTime);
+		model.addAttribute("endTime", endTime);
+		return "meet/order-meet";
+	}
+}

@@ -4,7 +4,7 @@
 <head>
 <base id="ctx" href="${ctx}">
 <meta charset="UTF-8">
-<title>浙江爱旭光伏-会议管理</title>
+<title>爱旭-会议预订</title>
 <link rel="stylesheet" type="text/css" href="${ctx}/easyui/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/easyui/themes/icon.css">
 <script type="text/javascript" src="${ctx}/easyui/jquery.min.js"></script>
@@ -27,6 +27,7 @@ var dkmi = ''
 		//遮盖未开放的会议室div层
 		//$.messager.alert("",checkTime(x1,new Date()))
 		
+		$('#myApp').linkbutton('disable')
 		$('#appMeet').linkbutton('disable')
 		
 		//alert(romi+'--'+dkmi)
@@ -190,7 +191,7 @@ var dkmi = ''
 						if(data[i].meetRoomId.substring(0,4)=="aiko"||data[i].meetRoomId.substring(0,4)=="aixu"){
 							$("#" + data[i].meetRoomId + "c").hide()
 						}else if(data[i].meetRoomId.substring(0,2)=="dk"){
-							$("#" + data[i].meetRoomId + "b").hide()
+							$("#" + data[i].meetRoomId + "c").hide()
 						}
 					}
 				}
@@ -202,9 +203,12 @@ var dkmi = ''
 	function applyMeet() {
 		var st = $('#metdate').val()+' '+$("#statime").val()+':00'
 		var et = $('#metdate').val()+' '+$("#endtime").val()+':00'
-		var am = $("#audiomeet").val()
+		var am = $("input:radio[name='audiomeet']:checked").val()
 		var rom = romi.substring(0,romi.length-1)
 		var dmi = dkmi.substring(0,dkmi.length-1)
+		if(dmi!=""){
+			rom += ',' + dmi
+		}
 		if ($('#metdate').val()==''||st == "" || et == "") {
 			$.messager.alert("消息提示", "${ctx}" + "请选择完整的会议时间")
 		} else if(!checkTime(st,new Date())||!checkTime(et,new Date())){
@@ -214,16 +218,40 @@ var dkmi = ''
 		}else if(rom==''&&dmi==''){
 			$.messager.alert('消息提示','请选择会议室或端口')
 		}else {
-			$.messager.alert("消息提示", "开始时间：" + st + "<br>结束时间：" + et + "<br>视频会议：" + am + "<br>会议室：" + rom + "<br>端口：" + dmi)
+			//$.messager.alert("消息提示", "开始时间：" + st + "<br>结束时间：" + et + "<br>会议类型：" + am + "<br>会议室：" + rom )
+			//openPostWindow('${ctx}/room/order-page', st,et,am,rom)
+			window.location.href='${ctx}/room/order-page?staTime='+st+'&&endTime='+et+'&&state='+am+'&&rooms='+rom
 		}
 	}
+	
+	//window.open 发送post请求
+	function openPostWindow(url, staTime,endTime,state,rooms) {
+   		 var newWin = window.open(),
+         formStr = '';
+     	//设置样式为隐藏，打开新标签再跳转页面前，如果有可现实的表单选项，用户会看到表单内容数据
+     	formStr = '<form style="visibility:hidden;" method="POST" action="' + url + '">' +
+          '<input type="hidden" name="staTime" value="' + staTime + '" />' +
+          '<input type="hidden" name="endTime" value="' + endTime + '" />' +
+          '<input type="hidden" name="state" value="' + state + '" />' +
+          '<input type="hidden" name="rooms" value="' + rooms + '" />' +
+          '</form>';
+
+    	newWin.document.body.innerHTML = formStr;
+    	newWin.document.forms[0].submit();
+    
+    	return newWin;
+	}
+	
 	//查看会议室详情
 	function getRoomInfo(roomId) {
 		$('#roomInfot').empty()
 		$('#meetInfot').empty()
 		$('#roomInfo').window('open')
+		var st = $('#metdate').val()
+		var sts = st==''?'今天':st
+		//alert(st)
 		$.ajax({
-			url:'${ctx}/room/getRoomInfo/'+roomId,
+			url:'${ctx}/room/getRoomInfo?roomId='+roomId+'&&appDate='st,
 			type:'get',
 			dataType:'json',
 			//cache:true,
@@ -260,7 +288,7 @@ var dkmi = ''
 						)
 				//$.messager.alert("",data.meetInfo)
 				$('#meetInfot').append(
-					`<tr><td colspan='8' style='color:blue;font-weight:bold;font-size:19px'>预订情况（今天）<hr size='1'/></td></tr>`
+					`<tr><td colspan='8' style='color:blue;font-weight:bold;font-size:19px'>预订情况（`+sts+`）<hr size='1'/></td></tr>`
 				)
 				console.log(data.meetInfo)
 				if(data.meetInfo.length==0){
@@ -320,16 +348,20 @@ var dkmi = ''
 		var timestamp2 = Date.parse(time2)
 		return timestamp1>timestamp2
 	}
+	//查看预订流程
+	function applyFlow(){
+		$('#showApplyFlow').window('open')
+	}
 </script>
 </head>
 <body class="easyui-layout">
 	<!-- 总 -->
-	<div class="easyui-layout" style="width: 100%; height: 680px;">
+	<div class="easyui-layout" fit="true" overflow='hidden' style="width: 100%; height: 680px;">
 		<!-- 主页面 -->
 		<div data-options="region:'center',title:'会议预订	',iconCls:'icon-tip'">
 			<!-- 查询栏 -->
 			<div
-				style="width: 100%; height: 5%; border: 1px solid #F7F7F7; background-color: #FAFAFA">
+				style="width: 100%; height: 7%; border: 1px solid #F7F7F7; background-color: #FAFAFA">
 				<table>
 					<tr>
 						<td width="90"></td>
@@ -418,9 +450,13 @@ var dkmi = ''
 							data-options="iconCls:'icon-add',plain:true" target="_blank">预订</a>
 						</td>
 						<td width="10"></td>
-						<td><a style="width: 90px; height: 30px"
+						<td><a style="width: 90px; height: 30px" id='myApp'
 							onclick="applyMeet()" class="easyui-linkbutton"
 							data-options="iconCls:'icon-ok',plain:true" target="_blank">我的申请</a>
+						<td width="10"></td>
+						<td><a style="width: 90px; height: 30px" id='myApp'
+							onclick="applyFlow()" class="easyui-linkbutton"
+							data-options="iconCls:'icon-ok',plain:true">预订流程</a>
 					</tr>
 				</table>
 			</div>
@@ -1917,6 +1953,20 @@ var dkmi = ''
 		<table style='width:100%;font-size:15px;text-align:left' id='meetInfot'>
 		</table>
 	</div>
-	<div id='log_window'></div>
+	<div id="showApplyFlow" class="easyui-window" title="预订流程"
+		data-options="modal:true,closed:true,iconCls:'icon-save'"
+		style="width: 400px; height: 200px;">
+		<table style='width:100%;font-size:15px;text-align:left;color:blue;' id='appLyFlowT'>
+			<tr height=40px>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp; 1.选择会议日期时间，查询会议室占用情况（红色为已被预订）</td>
+			</tr>
+			<tr height=40px>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp; 2.选中可预订会议室点击预订</td>
+			</tr>
+			<tr height=40px>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp; 注：选择日期之后点击会议室上面的查询按钮可查看该会议室的预订信息，卡顿可刷新页面</td>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>

@@ -1,0 +1,40 @@
+package com.aixu.meeting.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+
+import com.aixu.meeting.dao.AikoDeptMapper;
+import com.aixu.meeting.dao.AikoUserMapper;
+import com.aixu.meeting.domain.AikoDept;
+import com.aixu.meeting.domain.AikoDeptExample;
+import com.aixu.meeting.domain.AikoUser;
+import com.aixu.meeting.domain.AikoUserExample;
+
+@Service
+public class UserService {
+	
+	@Autowired
+	private AikoUserMapper userDAO;
+	
+	@Autowired
+	private AikoDeptMapper deptDAO;
+	
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
+	
+	public List<AikoUser> listAllUser () {
+		AikoUserExample example = new AikoUserExample();
+		example.createCriteria().andStatusEqualTo(1);
+		List<AikoUser> alUser = userDAO.selectByExample(example);
+		for (AikoUser aikoUser : alUser) {
+			AikoDept dept = deptDAO.selectByPrimaryKey(aikoUser.getDeptid());
+			aikoUser.setDeptName(dept.getName());
+		}
+		// stringRedisTemplate.opsForValue().set("myEmployeeCache", alUser);
+		return alUser;
+	}
+	
+}

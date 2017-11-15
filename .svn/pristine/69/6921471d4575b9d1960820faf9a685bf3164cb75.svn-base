@@ -1,0 +1,101 @@
+<#assign ctx=request.contextPath />
+<!DOCTYPE html>
+<html>
+<head>
+<base id="ctx" href="ctx">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>会议审核</title>
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/bootstrap/css/bootstrap.min.css">
+<script type="text/javascript" src="${ctx}/easyui/jquery.min.js"></script>
+<script type="text/javascript"
+	src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	function initVal(stutas) {
+		$("#status").val(stutas);
+	}
+</script>
+</head>
+<body>
+	<div class="panel panel-default">
+		<div style="text-align: center;" class="panel-heading">
+			<font size=5px><b>会议审核</b></font>
+		</div>
+		<div class="panel-body">
+			<div class="head">
+				<form action="${ctx}/admin/index" method="Get">
+					<input type="hidden" id="status" name="status" />
+					<div class="row">
+						<div class="col-md-1 col-xs-3">
+							<button type="submit" onclick="initVal('');" class="btn">刷新</button>
+						</div>
+						<div class="col-md-1 col-xs-3">
+							<button type="submit" onclick="initVal('待审核');"
+								class="btn btn-warning">待审核</button>
+						</div>
+						<div class="col-md-1 col-xs-3">
+							<button type="submit" onclick="initVal('已通过');"
+								class="btn btn-info">已通过</button>
+						</div>
+					</div>
+				</form>
+
+				<hr>
+			</div>
+			<br>
+			<form class="form-group">
+				<table class="table table-bordered table-striped">
+					<tr>
+						<th style="text-align: center">序号</th>
+						<th style="text-align: center">会议主题</th>
+						<th style="text-align: center">会议时间</th>
+						<th style="text-align: center">申请时间</th>
+						<th style="text-align: center">申请人</th>
+						<th style="text-align: center">会议状态</th>
+						<th style="text-align: center">审核</th>
+					</tr>
+					<#list meets.list as meet>
+					<tr>
+						<td style="text-align: center">${meet_index+1}</td>
+						<td style="text-align: center">${meet.meetTheme}</td>
+						<td style="text-align: center">${meet.staTime?string('yyyy年MM月dd日
+							HH:mm')} ~ ${meet.endTime?string('HH:mm')}</td>
+						<td style="text-align: center">${meet.meetCreateTime?string('yyyy年MM月dd日
+							HH:mm')}</td>
+						<td style="text-align: center">${meet.applyEmpName}</td>
+						<td style="text-align: center">${meet.meetState}</td>
+						<td style="text-align: center"><#if meet.meetState == "待审核">
+							<a href="${ctx}/admin/checkMeetInfo/${meet.meetId}" id="example"
+							class="btn btn-success" rel="popover"
+							data-original-title="Bootstrap弹出框">详情</a> <#else > <a href=""
+							id="example" class="btn btn-success" rel="popover"
+							data-original-title="Bootstrap弹出框">详情</a> </#if>
+						</td>
+					</tr>
+					</#list>
+				</table>
+				<nav aria-label="Page navigation">
+					<ul class="pagination">
+						<li><#if meets.total !=0> <span>第${meets.pageNum}/${meets.pages}页</#if>
+							总记录数：${meets.total} <#if meets.total
+								!=0>每页显示:${meets.pageSize}&nbsp;&nbsp;&nbsp;</span></#if></li>
+						<#if meets.pageNum!=1>
+						<li><a href="${ctx}/admin/index?currentPage=1">首页</a></li>
+						<li><a href="${ctx}/admin/index?currentPage=${meets.pageNum-1}" aria-label="Previous"> <span
+								aria-hidden="true">&lt;&lt;</span>
+						</a></li>
+						</#if>
+						<#if meets.pageNum !=meets.pages && meets.pages!=0>
+						<li><a href="${ctx}/admin/index?currentPage=${meets.pageNum+1}" aria-label="Next"> <span
+								aria-hidden="true">&gt;&gt;</span>
+						</a></li>
+						<li><a href="${ctx}/admin/index?currentPage=${meets.pages}">尾页</a></li>
+						</#if>
+					</ul>
+				</nav>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

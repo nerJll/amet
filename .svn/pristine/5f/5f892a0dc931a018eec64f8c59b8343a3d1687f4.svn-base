@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aixu.meeting.dao.AixuMeetandroomMapper" >
+<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+  <resultMap id="BaseResultMap" type="com.aixu.meeting.domain.AixuMeetandroom" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="MEET_ID" property="meetId" jdbcType="VARCHAR" />
+    <result column="ROOM_ID" property="roomId" jdbcType="VARCHAR" />
+    <result column="PERSON_NAMES" property="personNames" jdbcType="VARCHAR" />
+    <result column="PERSON_NO" property="personNo" jdbcType="VARCHAR" />
+    <result column="RES_ONE" property="resOne" jdbcType="VARCHAR" />
+    <result column="RES_TWO" property="resTwo" jdbcType="VARCHAR" />
+    <result column="RES_THREE" property="resThree" jdbcType="VARCHAR" />
+    <result column="RES_FOUR" property="resFour" jdbcType="VARCHAR" />
+    <result column="RES_FIVE" property="resFive" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, MEET_ID, ROOM_ID, PERSON_NAMES, PERSON_NO, RES_ONE, RES_TWO, RES_THREE, RES_FOUR, 
+    RES_FIVE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.aixu.meeting.domain.AixuMeetandroomExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from aixu_meetandroom
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from aixu_meetandroom
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from aixu_meetandroom
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.aixu.meeting.domain.AixuMeetandroomExample" >
+    delete from aixu_meetandroom
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.aixu.meeting.domain.AixuMeetandroom" >
+    insert into aixu_meetandroom (ID, MEET_ID, ROOM_ID, 
+      PERSON_NAMES, PERSON_NO, RES_ONE, 
+      RES_TWO, RES_THREE, RES_FOUR, 
+      RES_FIVE)
+    values (#{id,jdbcType=VARCHAR}, #{meetId,jdbcType=VARCHAR}, #{roomId,jdbcType=VARCHAR}, 
+      #{personNames,jdbcType=VARCHAR}, #{personNo,jdbcType=VARCHAR}, #{resOne,jdbcType=VARCHAR}, 
+      #{resTwo,jdbcType=VARCHAR}, #{resThree,jdbcType=VARCHAR}, #{resFour,jdbcType=VARCHAR}, 
+      #{resFive,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aixu.meeting.domain.AixuMeetandroom" >
+    insert into aixu_meetandroom
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="meetId != null" >
+        MEET_ID,
+      </if>
+      <if test="roomId != null" >
+        ROOM_ID,
+      </if>
+      <if test="personNames != null" >
+        PERSON_NAMES,
+      </if>
+      <if test="personNo != null" >
+        PERSON_NO,
+      </if>
+      <if test="resOne != null" >
+        RES_ONE,
+      </if>
+      <if test="resTwo != null" >
+        RES_TWO,
+      </if>
+      <if test="resThree != null" >
+        RES_THREE,
+      </if>
+      <if test="resFour != null" >
+        RES_FOUR,
+      </if>
+      <if test="resFive != null" >
+        RES_FIVE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="meetId != null" >
+        #{meetId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null" >
+        #{roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="personNames != null" >
+        #{personNames,jdbcType=VARCHAR},
+      </if>
+      <if test="personNo != null" >
+        #{personNo,jdbcType=VARCHAR},
+      </if>
+      <if test="resOne != null" >
+        #{resOne,jdbcType=VARCHAR},
+      </if>
+      <if test="resTwo != null" >
+        #{resTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="resThree != null" >
+        #{resThree,jdbcType=VARCHAR},
+      </if>
+      <if test="resFour != null" >
+        #{resFour,jdbcType=VARCHAR},
+      </if>
+      <if test="resFive != null" >
+        #{resFive,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.aixu.meeting.domain.AixuMeetandroomExample" resultType="java.lang.Integer" >
+    select count(*) from aixu_meetandroom
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update aixu_meetandroom
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meetId != null" >
+        MEET_ID = #{record.meetId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomId != null" >
+        ROOM_ID = #{record.roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.personNames != null" >
+        PERSON_NAMES = #{record.personNames,jdbcType=VARCHAR},
+      </if>
+      <if test="record.personNo != null" >
+        PERSON_NO = #{record.personNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resOne != null" >
+        RES_ONE = #{record.resOne,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resTwo != null" >
+        RES_TWO = #{record.resTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resThree != null" >
+        RES_THREE = #{record.resThree,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resFour != null" >
+        RES_FOUR = #{record.resFour,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resFive != null" >
+        RES_FIVE = #{record.resFive,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update aixu_meetandroom
+    set ID = #{record.id,jdbcType=VARCHAR},
+      MEET_ID = #{record.meetId,jdbcType=VARCHAR},
+      ROOM_ID = #{record.roomId,jdbcType=VARCHAR},
+      PERSON_NAMES = #{record.personNames,jdbcType=VARCHAR},
+      PERSON_NO = #{record.personNo,jdbcType=VARCHAR},
+      RES_ONE = #{record.resOne,jdbcType=VARCHAR},
+      RES_TWO = #{record.resTwo,jdbcType=VARCHAR},
+      RES_THREE = #{record.resThree,jdbcType=VARCHAR},
+      RES_FOUR = #{record.resFour,jdbcType=VARCHAR},
+      RES_FIVE = #{record.resFive,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aixu.meeting.domain.AixuMeetandroom" >
+    update aixu_meetandroom
+    <set >
+      <if test="meetId != null" >
+        MEET_ID = #{meetId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null" >
+        ROOM_ID = #{roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="personNames != null" >
+        PERSON_NAMES = #{personNames,jdbcType=VARCHAR},
+      </if>
+      <if test="personNo != null" >
+        PERSON_NO = #{personNo,jdbcType=VARCHAR},
+      </if>
+      <if test="resOne != null" >
+        RES_ONE = #{resOne,jdbcType=VARCHAR},
+      </if>
+      <if test="resTwo != null" >
+        RES_TWO = #{resTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="resThree != null" >
+        RES_THREE = #{resThree,jdbcType=VARCHAR},
+      </if>
+      <if test="resFour != null" >
+        RES_FOUR = #{resFour,jdbcType=VARCHAR},
+      </if>
+      <if test="resFive != null" >
+        RES_FIVE = #{resFive,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aixu.meeting.domain.AixuMeetandroom" >
+    update aixu_meetandroom
+    set MEET_ID = #{meetId,jdbcType=VARCHAR},
+      ROOM_ID = #{roomId,jdbcType=VARCHAR},
+      PERSON_NAMES = #{personNames,jdbcType=VARCHAR},
+      PERSON_NO = #{personNo,jdbcType=VARCHAR},
+      RES_ONE = #{resOne,jdbcType=VARCHAR},
+      RES_TWO = #{resTwo,jdbcType=VARCHAR},
+      RES_THREE = #{resThree,jdbcType=VARCHAR},
+      RES_FOUR = #{resFour,jdbcType=VARCHAR},
+      RES_FIVE = #{resFive,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
